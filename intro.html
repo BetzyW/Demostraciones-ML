@@ -1,0 +1,629 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Demostraciones de la tarea de Machine Learning &#8212; Demostraciones de Machine Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d4d30906" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"bx": "\\boldsymbol{x}", "by": "\\boldsymbol{y}", "bv": "\\boldsymbol{v}", "bu": "\\boldsymbol{u}", "bb": "\\boldsymbol{b}", "ba": "\\boldsymbol{a}", "bc": "\\boldsymbol{c}", "br": "\\boldsymbol{r}", "bs": "\\boldsymbol{s}", "bw": "\\boldsymbol{w}", "bmu": "\\boldsymbol{\\mu}", "beps": "\\boldsymbol{\\varepsilon}", "bbeta": "\\boldsymbol{\\beta}", "bgamma": "\\boldsymbol{\\gamma}", "E": "\\mathbb{E}", "Prob": "\\mathbb{P}", "Ind": "\\mathbb{I}", "Dist": "\\mathcal{D}", "T": "\\mathsf{T}", "uno": "\\mathbf{1}", "cero": "\\mathbf{0}", "sgn": "\\operatorname{sgn}", "tr": "\\operatorname{tr}", "Cov": "\\operatorname{Cov}", "rg": "\\operatorname{rg}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="1. k-NN: error verdadero y riesgo esperado (Ec. 2.2)" href="cap01_knn_riesgo.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Demostraciones de Machine Learning</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    Demostraciones de la tarea de Machine Learning
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">k-NN</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cap01_knn_riesgo.html">1. k-NN: error verdadero y riesgo esperado (Ec. 2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap02_knn_desigualdad.html">2. k-NN: la desigualdad con <span class="math notranslate nohighlight">\(\min\{\eta,1-\eta\}\)</span> (caso <span class="math notranslate nohighlight">\(1-\eta(\bx)\)</span>)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Regresión Ridge y Lasso</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cap03_ridge_propiedades.html">3. Ridge: propiedades del estimador (Ec. 3.12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap04_ridge_intercepto.html">4. Ridge: <span class="math notranslate nohighlight">\(Z^\T\uno=\cero\)</span> y la derivada respecto al intercepto (Ec. 3.8)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap05_ridge_estandarizacion.html">5. Ridge: estandarización (Ec. 3.11) y <span class="math notranslate nohighlight">\(\beta_0^\star=\bar y=0\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap06_lasso.html">6. Lasso: obtención de los estimadores</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Árboles y AdaBoost</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cap07_arboles.html">7. Árboles: dónde está el error del Ejercicio 6 (Sec. 12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap08_adaboost.html">8. AdaBoost: origen del algoritmo y error de entrenamiento exponencialmente decreciente</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cierre</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cap09_verificaciones.html">9. Verificaciones numéricas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="referencias.html">Referencias</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/intro.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Demostraciones de la tarea de Machine Learning</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#panorama">Panorama</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convenciones">Convenciones</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="demostraciones-de-la-tarea-de-machine-learning">
+<h1>Demostraciones de la tarea de Machine Learning<a class="headerlink" href="#demostraciones-de-la-tarea-de-machine-learning" title="Link to this heading">#</a></h1>
+<p><strong>k-NN · Regresión Ridge y Lasso · Árboles y AdaBoost</strong></p>
+<p><em>Solución detallada con base en las notas de clase del Dr. Lihki Rubio — 25 de octubre de 2026</em></p>
+<p>Este libro resuelve, con el mayor detalle posible, las ocho casillas del archivo
+<code class="docutils literal notranslate"><span class="pre">Demostraciones_Tarea.docx</span></code>, usando la notación y los resultados de las notas de clase
+del Dr. Lihki Rubio (<a class="reference external" href="https://lihkir.github.io/MachineLearning/">https://lihkir.github.io/MachineLearning/</a>). Cada capítulo sigue el
+mismo esquema: <em>enunciado</em>, <em>idea</em>, <em>demostración paso a paso</em> y <em>observaciones</em>. Además, todas las
+fórmulas y los cálculos numéricos se comprobaron por computador (ver el capítulo
+<a class="reference internal" href="cap09_verificaciones.html"><span class="doc">9. Verificaciones numéricas</span></a>).</p>
+<section id="panorama">
+<h2>Panorama<a class="headerlink" href="#panorama" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>§</p></th>
+<th class="head"><p>Tema</p></th>
+<th class="head"><p>Qué se demuestra</p></th>
+<th class="head"><p>Idea clave</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>k-NN</p></td>
+<td><p>Ec. (2.2): <span class="math notranslate nohighlight">\(L_\Dist(h)=\Prob[h(\bx)\neq y]=\Dist(\{h(\bx)\neq y\})=\E[\ell_{0\text{-}1}]\)</span>, y error de Bayes</p></td>
+<td><p>Probabilidad = esperanza de una indicadora</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>k-NN</p></td>
+<td><p><span class="math notranslate nohighlight">\(2\eta(1-\eta)\le 2\min\{\eta,1-\eta\}\)</span> (caso <span class="math notranslate nohighlight">\(1-\eta(\bx)\)</span>)</p></td>
+<td><p><span class="math notranslate nohighlight">\(\eta(1-\eta)=\min\cdot\max\)</span> y <span class="math notranslate nohighlight">\(\max\le 1\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Ridge</p></td>
+<td><p>Propiedades (3.12): media, covarianza, sesgo y error cuadrático</p></td>
+<td><p><span class="math notranslate nohighlight">\(M(X^\T X)=I-\lambda M\)</span> y diagonalización de <span class="math notranslate nohighlight">\(X^\T X\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Ridge</p></td>
+<td><p><span class="math notranslate nohighlight">\(Z^\T\uno=\uno^\T Z=\cero\)</span>; derivada (3.8); solución para <span class="math notranslate nohighlight">\(\bbeta_s\)</span></p></td>
+<td><p>Centrar las columnas las hace ortogonales a <span class="math notranslate nohighlight">\(\uno\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Ridge</p></td>
+<td><p>Igualdades (3.11) y <span class="math notranslate nohighlight">\(\beta_0^\star=\bar y=0\)</span></p></td>
+<td><p>Linealidad de la suma</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Lasso</p></td>
+<td><p>Estimadores lasso: KKT, umbral suave, conjunto activo, LARS</p></td>
+<td><p>Subdiferencial de <span class="math notranslate nohighlight">\(\lvert\cdot\rvert\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Árboles</p></td>
+<td><p>Ejercicio 6 (Sec. 12): ubicar el error en la solución</p></td>
+<td><p>Recalcular Gini con fracciones exactas</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>AdaBoost</p></td>
+<td><p>Origen de los pasos del Alg. 5.1 y error de entrenamiento <span class="math notranslate nohighlight">\(\le e^{-2\gamma^2K}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\Ind_{[f\neq y]}\le e^{-yF}\)</span> y producto de <span class="math notranslate nohighlight">\(Z_i\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="danger admonition">
+<p class="admonition-title">Dos hallazgos que conviene conocer antes de leer</p>
+<ol class="arabic simple">
+<li><p><strong>§2.</strong> En las notas, la cadena intermedia <span class="math notranslate nohighlight">\(2(1-\eta)^2\le 2\min\{\eta,1-\eta\}\)</span> es <em>falsa</em> en general
+(p. ej. <span class="math notranslate nohighlight">\(\eta=0.1\)</span> da <span class="math notranslate nohighlight">\(1.62\le 0.20\)</span>). La desigualdad final sí es correcta; aquí se da una prueba
+válida para ambos casos.</p></li>
+<li><p><strong>§7.</strong> El error de la solución del Ejercicio 6 <em>no</em> está en el primer árbol (umbrales
+<span class="math notranslate nohighlight">\(27, 33, 36, 39,\dots\)</span>), cuyos números son correctos. Está en el segundo nivel: el índice de
+<code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Dogs</span></code> se reporta como <span class="math notranslate nohighlight">\(0.17\)</span> cuando es <span class="math notranslate nohighlight">\(0.25\)</span>, se omite el umbral <span class="math notranslate nohighlight">\(\text{Age}=49\)</span> (que da
+<span class="math notranslate nohighlight">\(\text{Gini}=0\)</span>) y el árbol final asigna mal las ramas, clasificando mal 2 de los 10 datos de
+entrenamiento.</p></li>
+</ol>
+</div>
+</section>
+<section id="convenciones">
+<h2>Convenciones<a class="headerlink" href="#convenciones" title="Link to this heading">#</a></h2>
+<p>Los vectores son columnas; <span class="math notranslate nohighlight">\(\lVert\cdot\rVert\)</span> es la norma euclídea; <span class="math notranslate nohighlight">\(\uno\)</span> es el vector de unos; <span class="math notranslate nohighlight">\((t)_+=\max\{t,0\}\)</span>;
+<span class="math notranslate nohighlight">\(\sgn(t)\in\{-1,0,1\}\)</span> es el signo. La función indicadora se escribe <span class="math notranslate nohighlight">\(\Ind_A\)</span> (las notas la escriben <span class="math notranslate nohighlight">\(\unicode{x1D7D9}_A\)</span>).
+Cuando una casilla del archivo solo dice «Demostrar», se indica explícitamente en una <em>nota de
+interpretación</em> qué resultado se tomó; si la intención era otra, la estructura de cada capítulo permite
+adaptarla fácilmente.</p>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">k-NN</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cap01_knn_riesgo.html">1. k-NN: error verdadero y riesgo esperado (Ec. 2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap02_knn_desigualdad.html">2. k-NN: la desigualdad con <span class="math notranslate nohighlight">\(\min\{\eta,1-\eta\}\)</span> (caso <span class="math notranslate nohighlight">\(1-\eta(\bx)\)</span>)</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Regresión Ridge y Lasso</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cap03_ridge_propiedades.html">3. Ridge: propiedades del estimador (Ec. 3.12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap04_ridge_intercepto.html">4. Ridge: <span class="math notranslate nohighlight">\(Z^\T\uno=\cero\)</span> y la derivada respecto al intercepto (Ec. 3.8)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap05_ridge_estandarizacion.html">5. Ridge: estandarización (Ec. 3.11) y <span class="math notranslate nohighlight">\(\beta_0^\star=\bar y=0\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap06_lasso.html">6. Lasso: obtención de los estimadores</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Árboles y AdaBoost</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cap07_arboles.html">7. Árboles: dónde está el error del Ejercicio 6 (Sec. 12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap08_adaboost.html">8. AdaBoost: origen del algoritmo y error de entrenamiento exponencialmente decreciente</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cierre</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cap09_verificaciones.html">9. Verificaciones numéricas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="referencias.html">Referencias</a></li>
+</ul>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="cap01_knn_riesgo.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">1. k-NN: error verdadero y riesgo esperado (Ec. 2.2)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#panorama">Panorama</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convenciones">Convenciones</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Tu nombre
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

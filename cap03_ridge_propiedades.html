@@ -1,0 +1,631 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3. Ridge: propiedades del estimador (Ec. 3.12) &#8212; Demostraciones de Machine Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d4d30906" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"bx": "\\boldsymbol{x}", "by": "\\boldsymbol{y}", "bv": "\\boldsymbol{v}", "bu": "\\boldsymbol{u}", "bb": "\\boldsymbol{b}", "ba": "\\boldsymbol{a}", "bc": "\\boldsymbol{c}", "br": "\\boldsymbol{r}", "bs": "\\boldsymbol{s}", "bw": "\\boldsymbol{w}", "bmu": "\\boldsymbol{\\mu}", "beps": "\\boldsymbol{\\varepsilon}", "bbeta": "\\boldsymbol{\\beta}", "bgamma": "\\boldsymbol{\\gamma}", "E": "\\mathbb{E}", "Prob": "\\mathbb{P}", "Ind": "\\mathbb{I}", "Dist": "\\mathcal{D}", "T": "\\mathsf{T}", "uno": "\\mathbf{1}", "cero": "\\mathbf{0}", "sgn": "\\operatorname{sgn}", "tr": "\\operatorname{tr}", "Cov": "\\operatorname{Cov}", "rg": "\\operatorname{rg}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cap03_ridge_propiedades';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="4. Ridge: \(Z^\T\uno=\cero\) y la derivada respecto al intercepto (Ec. 3.8)" href="cap04_ridge_intercepto.html" />
+    <link rel="prev" title="2. k-NN: la desigualdad con \(\min\{\eta,1-\eta\}\) (caso \(1-\eta(\bx)\))" href="cap02_knn_desigualdad.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Demostraciones de Machine Learning</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Demostraciones de la tarea de Machine Learning
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">k-NN</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cap01_knn_riesgo.html">1. k-NN: error verdadero y riesgo esperado (Ec. 2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap02_knn_desigualdad.html">2. k-NN: la desigualdad con <span class="math notranslate nohighlight">\(\min\{\eta,1-\eta\}\)</span> (caso <span class="math notranslate nohighlight">\(1-\eta(\bx)\)</span>)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Regresión Ridge y Lasso</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">3. Ridge: propiedades del estimador (Ec. 3.12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap04_ridge_intercepto.html">4. Ridge: <span class="math notranslate nohighlight">\(Z^\T\uno=\cero\)</span> y la derivada respecto al intercepto (Ec. 3.8)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap05_ridge_estandarizacion.html">5. Ridge: estandarización (Ec. 3.11) y <span class="math notranslate nohighlight">\(\beta_0^\star=\bar y=0\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap06_lasso.html">6. Lasso: obtención de los estimadores</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Árboles y AdaBoost</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cap07_arboles.html">7. Árboles: dónde está el error del Ejercicio 6 (Sec. 12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap08_adaboost.html">8. AdaBoost: origen del algoritmo y error de entrenamiento exponencialmente decreciente</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cierre</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cap09_verificaciones.html">9. Verificaciones numéricas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="referencias.html">Referencias</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/cap03_ridge_propiedades.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>3. Ridge: propiedades del estimador (Ec. 3.12)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lemas-auxiliares">Lemas auxiliares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demostracion-de-las-cuatro-propiedades">Demostración de las cuatro propiedades</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ridge-propiedades-del-estimador-ec-3-12">
+<h1>3. Ridge: propiedades del estimador (Ec. 3.12)<a class="headerlink" href="#ridge-propiedades-del-estimador-ec-3-12" title="Link to this heading">#</a></h1>
+<div class="note admonition">
+<p class="admonition-title">Enunciado</p>
+<p>Considere el modelo <span class="math notranslate nohighlight">\(\by=X\bbeta+\beps\)</span> con <span class="math notranslate nohighlight">\(X\in\mathbb R^{n\times p}\)</span> fija (datos estandarizados, ver
+el capítulo 5), <span class="math notranslate nohighlight">\(\E(\beps)=\cero\)</span>, <span class="math notranslate nohighlight">\(\Cov(\beps)=\sigma^2I_n\)</span>, y el estimador ridge con <span class="math notranslate nohighlight">\(\lambda&gt;0\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\hat\bbeta_R=(X^\T X+\lambda I_p)^{-1}X^\T\by.
+\]</div>
+<p>Si <span class="math notranslate nohighlight">\(l_1,\dots,l_p\)</span> son los autovalores de <span class="math notranslate nohighlight">\(X^\T X\)</span>, demostrar</p>
+<div class="math notranslate nohighlight" id="equation-eq-r-media">
+<span class="eqno">(4)<a class="headerlink" href="#equation-eq-r-media" title="Link to this equation">#</a></span>\[
+\E(\hat\bbeta_R)=(X^\T X+\lambda I_p)^{-1}X^\T X\,\bbeta,
+\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-r-cov">
+<span class="eqno">(5)<a class="headerlink" href="#equation-eq-r-cov" title="Link to this equation">#</a></span>\[
+\Cov(\hat\bbeta_R)=\sigma^2(X^\T X+\lambda I_p)^{-1}X^\T X(X^\T X+\lambda I_p)^{-1},
+\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-r-sesgo">
+<span class="eqno">(6)<a class="headerlink" href="#equation-eq-r-sesgo" title="Link to this equation">#</a></span>\[
+\E(\hat\bbeta_R-\bbeta)=-\lambda(X^\T X+\lambda I_p)^{-1}\bbeta,
+\]</div>
+<div class="math notranslate nohighlight" id="equation-eq-r-ecm">
+<span class="eqno">(7)<a class="headerlink" href="#equation-eq-r-ecm" title="Link to this equation">#</a></span>\[
+\E\big[(\hat\bbeta_R-\bbeta)^\T(\hat\bbeta_R-\bbeta)\big]=\sigma^2\sum_{j=1}^p\frac{l_j}{(l_j+\lambda)^2}+\lambda^2\bbeta^\T(X^\T X+\lambda I_p)^{-2}\bbeta.
+\]</div>
+</div>
+<div class="important admonition">
+<p class="admonition-title">Notación</p>
+<p><span class="math notranslate nohighlight">\(A:=X^\T X\)</span> (simétrica, semidefinida positiva) y <span class="math notranslate nohighlight">\(M:=(A+\lambda I_p)^{-1}\)</span>. Entonces
+<span class="math notranslate nohighlight">\(\hat\bbeta_R=MX^\T\by\)</span>. Estas son las propiedades que las notas dejan como «ejercicio para el lector».</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Idea</p>
+<p>Con <span class="math notranslate nohighlight">\(\hat\bbeta_R=MX^\T\by\)</span> <em>lineal</em> en <span class="math notranslate nohighlight">\(\by\)</span>, la media y la covarianza se obtienen con las reglas de
+transformaciones lineales. El sesgo sale de la identidad <span class="math notranslate nohighlight">\(MA=I-\lambda M\)</span>. El error cuadrático
+es «traza de la covarianza + sesgo²», y la traza se calcula diagonalizando <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</div>
+<section id="lemas-auxiliares">
+<h2>Lemas auxiliares<a class="headerlink" href="#lemas-auxiliares" title="Link to this heading">#</a></h2>
+<div class="proof lemma admonition" id="lem-M">
+<p class="admonition-title"><span class="caption-number">Lema 1 </span> (<span class="math notranslate nohighlight">\(M\)</span> está bien definida)</p>
+<section class="lemma-content" id="proof-content">
+<p><span class="math notranslate nohighlight">\(A+\lambda I_p\)</span> es simétrica definida positiva; por tanto es invertible,
+<span class="math notranslate nohighlight">\(M\)</span> es simétrica, y <span class="math notranslate nohighlight">\(M\)</span> conmuta con <span class="math notranslate nohighlight">\(A\)</span>. Además</p>
+<div class="math notranslate nohighlight" id="equation-eq-ma">
+<span class="eqno">(8)<a class="headerlink" href="#equation-eq-ma" title="Link to this equation">#</a></span>\[
+MA=AM=I_p-\lambda M.
+\]</div>
+</section>
+</div><div class="demo admonition">
+<p class="admonition-title">Demostración</p>
+<p>Para <span class="math notranslate nohighlight">\(\bv\neq\cero\)</span>: <span class="math notranslate nohighlight">\(\bv^\T(A+\lambda I)\bv=\lVert X\bv\rVert^2+\lambda\lVert\bv\rVert^2\ge\lambda\lVert\bv\rVert^2&gt;0\)</span>. Una matriz
+simétrica definida positiva es invertible y su inversa es simétrica. Como <span class="math notranslate nohighlight">\((A+\lambda I)A=A(A+\lambda I)\)</span>,
+multiplicando por <span class="math notranslate nohighlight">\(M\)</span> a ambos lados se obtiene <span class="math notranslate nohighlight">\(AM=MA\)</span>. Finalmente <span class="math notranslate nohighlight">\(A=(A+\lambda I)-\lambda I=M^{-1}-\lambda I\)</span>,
+de donde <span class="math notranslate nohighlight">\(MA=M(M^{-1}-\lambda I)=I-\lambda M\)</span>.</p>
+</div>
+<div class="proof lemma admonition" id="lem-lineal">
+<p class="admonition-title"><span class="caption-number">Lema 2 </span> (Transformación lineal de un vector aleatorio)</p>
+<section class="lemma-content" id="proof-content">
+<p>Si <span class="math notranslate nohighlight">\(W=\bc+BY\)</span> con <span class="math notranslate nohighlight">\(\bc\)</span> y <span class="math notranslate nohighlight">\(B\)</span> constantes, entonces <span class="math notranslate nohighlight">\(\E[W]=\bc+B\,\E[Y]\)</span> y <span class="math notranslate nohighlight">\(\Cov(W)=B\,\Cov(Y)\,B^\T\)</span>.</p>
+</section>
+</div><div class="demo admonition">
+<p class="admonition-title">Demostración</p>
+<p>La primera igualdad es linealidad de la esperanza. Para la segunda, <span class="math notranslate nohighlight">\(W-\E[W]=B(Y-\E[Y])\)</span>,
+así que <span class="math notranslate nohighlight">\(\Cov(W)=\E\big[B(Y-\E Y)(Y-\E Y)^\T B^\T\big]=B\,\Cov(Y)\,B^\T\)</span>.</p>
+</div>
+</section>
+<section id="demostracion-de-las-cuatro-propiedades">
+<h2>Demostración de las cuatro propiedades<a class="headerlink" href="#demostracion-de-las-cuatro-propiedades" title="Link to this heading">#</a></h2>
+<div class="demo admonition">
+<p class="admonition-title">Demostración</p>
+<p>Como <span class="math notranslate nohighlight">\(X\)</span> y <span class="math notranslate nohighlight">\(\bbeta\)</span> no son aleatorios, <span class="math notranslate nohighlight">\(\E(\by)=X\bbeta\)</span> y <span class="math notranslate nohighlight">\(\Cov(\by)=\Cov(\beps)=\sigma^2I_n\)</span>.</p>
+<p><strong><a class="reference internal" href="#equation-eq-r-media">(4)</a> Media.</strong> Por el <a class="reference internal" href="#lem-lineal">Lema 2</a> con <span class="math notranslate nohighlight">\(B=MX^\T\)</span>: <span class="math notranslate nohighlight">\(\E(\hat\bbeta_R)=MX^\T\E(\by)=MX^\T X\bbeta=MA\,\bbeta\)</span>.</p>
+<p><strong><a class="reference internal" href="#equation-eq-r-cov">(5)</a> Covarianza.</strong> Por el <a class="reference internal" href="#lem-lineal">Lema 2</a>, <span class="math notranslate nohighlight">\(\Cov(\hat\bbeta_R)=(MX^\T)(\sigma^2I_n)(MX^\T)^\T=\sigma^2MX^\T XM^\T=\sigma^2MAM\)</span>,
+usando que <span class="math notranslate nohighlight">\(M^\T=M\)</span>.</p>
+<p><strong><a class="reference internal" href="#equation-eq-r-sesgo">(6)</a> Sesgo.</strong> Por <a class="reference internal" href="#equation-eq-r-media">(4)</a> y <a class="reference internal" href="#equation-eq-ma">(8)</a>,</p>
+<div class="math notranslate nohighlight">
+\[
+\E(\hat\bbeta_R)-\bbeta=(MA-I)\bbeta=(I-\lambda M-I)\bbeta=-\lambda M\bbeta.
+\]</div>
+<p><strong><a class="reference internal" href="#equation-eq-r-ecm">(7)</a> Error cuadrático.</strong> Sean <span class="math notranslate nohighlight">\(\bu:=\hat\bbeta_R-\E(\hat\bbeta_R)\)</span> (aleatorio, de media cero) y <span class="math notranslate nohighlight">\(\bb:=\E(\hat\bbeta_R)-\bbeta\)</span>
+(constante). Entonces <span class="math notranslate nohighlight">\(\hat\bbeta_R-\bbeta=\bu+\bb\)</span> y</p>
+<div class="math notranslate nohighlight">
+\[
+\E\lVert\hat\bbeta_R-\bbeta\rVert^2=\E\lVert\bu\rVert^2+2\bb^\T\underbrace{\E[\bu]}_{=\cero}+\lVert\bb\rVert^2=\tr\Cov(\hat\bbeta_R)+\lVert\bb\rVert^2,
+\]</div>
+<p>pues <span class="math notranslate nohighlight">\(\E\lVert\bu\rVert^2=\E[\tr(\bu\bu^\T)]=\tr\E[\bu\bu^\T]=\tr\Cov(\hat\bbeta_R)\)</span>.</p>
+<p><em>Término de varianza.</em> Diagonalizamos <span class="math notranslate nohighlight">\(A=\Gamma L\Gamma^\T\)</span> con <span class="math notranslate nohighlight">\(\Gamma\)</span> ortogonal y <span class="math notranslate nohighlight">\(L=\operatorname{diag}(l_1,\dots,l_p)\)</span>. Entonces
+<span class="math notranslate nohighlight">\(A+\lambda I=\Gamma(L+\lambda I)\Gamma^\T\)</span> y <span class="math notranslate nohighlight">\(M=\Gamma(L+\lambda I)^{-1}\Gamma^\T\)</span>, luego</p>
+<div class="math notranslate nohighlight">
+\[
+MAM=\Gamma(L+\lambda I)^{-1}L(L+\lambda I)^{-1}\Gamma^\T=\Gamma\operatorname{diag}\Big(\tfrac{l_j}{(l_j+\lambda)^2}\Big)\Gamma^\T.
+\]</div>
+<p>Por la propiedad cíclica de la traza, <span class="math notranslate nohighlight">\(\tr(\Gamma D\Gamma^\T)=\tr(D\Gamma^\T\Gamma)=\tr D\)</span>, así que
+<span class="math notranslate nohighlight">\(\tr\Cov(\hat\bbeta_R)=\sigma^2\sum_{j=1}^p\frac{l_j}{(l_j+\lambda)^2}\)</span>.</p>
+<p><em>Término de sesgo.</em> Por <a class="reference internal" href="#equation-eq-r-sesgo">(6)</a>, <span class="math notranslate nohighlight">\(\lVert\bb\rVert^2=\lambda^2\bbeta^\T M^\T M\bbeta=\lambda^2\bbeta^\T M^2\bbeta=\lambda^2\bbeta^\T(X^\T X+\lambda I)^{-2}\bbeta\)</span>.</p>
+<p>Sumando ambos términos se obtiene <a class="reference internal" href="#equation-eq-r-ecm">(7)</a>.</p>
+</div>
+<div class="warning admonition">
+<p class="admonition-title">Interpretación: el compromiso sesgo–varianza</p>
+<p>En la base de autovectores, <span class="math notranslate nohighlight">\(\lVert\bb\rVert^2=\sum_j\frac{\lambda^2}{(l_j+\lambda)^2}(\bgamma_j^\T\bbeta)^2\)</span>, que <em>crece</em> con <span class="math notranslate nohighlight">\(\lambda\)</span>, mientras que cada sumando
+<span class="math notranslate nohighlight">\(\frac{l_j}{(l_j+\lambda)^2}\)</span> de la varianza <em>decrece</em> (su derivada es <span class="math notranslate nohighlight">\(-2l_j/(l_j+\lambda)^3&lt;0\)</span>).</p>
+<ul class="simple">
+<li><p>Con <span class="math notranslate nohighlight">\(\lambda=0\)</span> (MCO): sesgo 0 y varianza total <span class="math notranslate nohighlight">\(\sigma^2\sum_j 1/l_j\)</span>, que explota si algún <span class="math notranslate nohighlight">\(l_j\approx0\)</span>
+(multicolinealidad). Esto justifica ridge.</p></li>
+<li><p>Como la derivada del error cuadrático en <span class="math notranslate nohighlight">\(\lambda=0\)</span> es <span class="math notranslate nohighlight">\(-2\sigma^2\sum_j l_j^{-2}&lt;0\)</span> (el término de
+sesgo² tiene derivada 0 en <span class="math notranslate nohighlight">\(\lambda=0\)</span> por ser <span class="math notranslate nohighlight">\(\propto\lambda^2\)</span>), existe <span class="math notranslate nohighlight">\(\lambda&gt;0\)</span> con error cuadrático menor
+que el de MCO.</p></li>
+<li><p>Con <span class="math notranslate nohighlight">\(\lambda\to\infty\)</span>: <span class="math notranslate nohighlight">\(\hat\bbeta_R\to\cero\)</span>, sesgo <span class="math notranslate nohighlight">\(\to-\bbeta\)</span> y varianza <span class="math notranslate nohighlight">\(\to0\)</span>.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="cap02_knn_desigualdad.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">2. k-NN: la desigualdad con <span class="math notranslate nohighlight">\(\min\{\eta,1-\eta\}\)</span> (caso <span class="math notranslate nohighlight">\(1-\eta(\bx)\)</span>)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="cap04_ridge_intercepto.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">4. Ridge: <span class="math notranslate nohighlight">\(Z^\T\uno=\cero\)</span> y la derivada respecto al intercepto (Ec. 3.8)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lemas-auxiliares">Lemas auxiliares</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demostracion-de-las-cuatro-propiedades">Demostración de las cuatro propiedades</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Tu nombre
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,723 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8. AdaBoost: origen del algoritmo y error de entrenamiento exponencialmente decreciente &#8212; Demostraciones de Machine Learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d4d30906" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"bx": "\\boldsymbol{x}", "by": "\\boldsymbol{y}", "bv": "\\boldsymbol{v}", "bu": "\\boldsymbol{u}", "bb": "\\boldsymbol{b}", "ba": "\\boldsymbol{a}", "bc": "\\boldsymbol{c}", "br": "\\boldsymbol{r}", "bs": "\\boldsymbol{s}", "bw": "\\boldsymbol{w}", "bmu": "\\boldsymbol{\\mu}", "beps": "\\boldsymbol{\\varepsilon}", "bbeta": "\\boldsymbol{\\beta}", "bgamma": "\\boldsymbol{\\gamma}", "E": "\\mathbb{E}", "Prob": "\\mathbb{P}", "Ind": "\\mathbb{I}", "Dist": "\\mathcal{D}", "T": "\\mathsf{T}", "uno": "\\mathbf{1}", "cero": "\\mathbf{0}", "sgn": "\\operatorname{sgn}", "tr": "\\operatorname{tr}", "Cov": "\\operatorname{Cov}", "rg": "\\operatorname{rg}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cap08_adaboost';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="9. Verificaciones numéricas" href="cap09_verificaciones.html" />
+    <link rel="prev" title="7. Árboles: dónde está el error del Ejercicio 6 (Sec. 12)" href="cap07_arboles.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Demostraciones de Machine Learning</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Demostraciones de la tarea de Machine Learning
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">k-NN</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cap01_knn_riesgo.html">1. k-NN: error verdadero y riesgo esperado (Ec. 2.2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap02_knn_desigualdad.html">2. k-NN: la desigualdad con <span class="math notranslate nohighlight">\(\min\{\eta,1-\eta\}\)</span> (caso <span class="math notranslate nohighlight">\(1-\eta(\bx)\)</span>)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Regresión Ridge y Lasso</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cap03_ridge_propiedades.html">3. Ridge: propiedades del estimador (Ec. 3.12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap04_ridge_intercepto.html">4. Ridge: <span class="math notranslate nohighlight">\(Z^\T\uno=\cero\)</span> y la derivada respecto al intercepto (Ec. 3.8)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap05_ridge_estandarizacion.html">5. Ridge: estandarización (Ec. 3.11) y <span class="math notranslate nohighlight">\(\beta_0^\star=\bar y=0\)</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="cap06_lasso.html">6. Lasso: obtención de los estimadores</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Árboles y AdaBoost</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cap07_arboles.html">7. Árboles: dónde está el error del Ejercicio 6 (Sec. 12)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">8. AdaBoost: origen del algoritmo y error de entrenamiento exponencialmente decreciente</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cierre</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cap09_verificaciones.html">9. Verificaciones numéricas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="referencias.html">Referencias</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/cap08_adaboost.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>8. AdaBoost: origen del algoritmo y error de entrenamiento exponencialmente decreciente</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parte-a-derivacion-del-algoritmo">Parte A: derivación del algoritmo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parte-b-el-error-de-entrenamiento">Parte B: el error de entrenamiento</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comprobacion-numerica">Comprobación numérica</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="adaboost-origen-del-algoritmo-y-error-de-entrenamiento-exponencialmente-decreciente">
+<h1>8. AdaBoost: origen del algoritmo y error de entrenamiento exponencialmente decreciente<a class="headerlink" href="#adaboost-origen-del-algoritmo-y-error-de-entrenamiento-exponencialmente-decreciente" title="Link to this heading">#</a></h1>
+<div class="note admonition">
+<p class="admonition-title">Enunciado</p>
+<p>Sean <span class="math notranslate nohighlight">\((y_n,\bx_n)\)</span>, <span class="math notranslate nohighlight">\(n=1,\dots,N\)</span>, con <span class="math notranslate nohighlight">\(y_n\in\{-1,1\}\)</span>, clasificadores base <span class="math notranslate nohighlight">\(\phi(\cdot;\theta)\in
+\{-1,1\}\)</span>, <span class="math notranslate nohighlight">\(F_i=\sum_{k\le i}a_k\phi_k\)</span> con <span class="math notranslate nohighlight">\(\phi_k=\phi(\cdot;\theta_k)\)</span> y <span class="math notranslate nohighlight">\(f=\sgn(F_K)\)</span> (con <span class="math notranslate nohighlight">\(\sgn(0)=+1\)</span>). Con
+<span class="math notranslate nohighlight">\(P_i=\sum_n\omega_n^{(i)}\Ind_{[y_n\phi_i(\bx_n)&lt;0]}\)</span> (error ponderado), demostrar:</p>
+<p><strong>(A) Origen del Algoritmo 5.1.</strong> Los pasos <span class="math notranslate nohighlight">\(\omega_n^{(i)}\)</span>, <span class="math notranslate nohighlight">\(\theta_i\)</span>, <span class="math notranslate nohighlight">\(a_i=\frac12\ln\frac{1-P_i}{P_i}\)</span> y <span class="math notranslate nohighlight">\(Z_i\)</span> resultan de
+minimizar de forma voraz la pérdida exponencial <span class="math notranslate nohighlight">\(\sum_ne^{-y_nF_i(\bx_n)}\)</span>.</p>
+<p><strong>(B) Convergencia exponencial.</strong> El error de entrenamiento <span class="math notranslate nohighlight">\(L_S(f)=\frac1N\sum_n\Ind_{[f(\bx_n)\neq y_n]}\)</span> cumple</p>
+<div class="math notranslate nohighlight" id="equation-eq-ada-cota">
+<span class="eqno">(13)<a class="headerlink" href="#equation-eq-ada-cota" title="Link to this equation">#</a></span>\[
+L_S(f)\ \le\ \prod_{i=1}^KZ_i=\prod_{i=1}^K2\sqrt{P_i(1-P_i)}=\prod_{i=1}^K\sqrt{1-4\gamma_i^2}\ \le\ \exp\Big(-2\sum_{i=1}^K\gamma_i^2\Big),\qquad\gamma_i=\tfrac12-P_i.
+\]</div>
+<p>En particular, si <span class="math notranslate nohighlight">\(P_i\le\frac12-\gamma\)</span> para todo <span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(L_S(f)\le e^{-2\gamma^2K}\)</span>.</p>
+</div>
+<div class="important admonition">
+<p class="admonition-title">Nota de interpretación</p>
+<p>La casilla muestra el Algoritmo 5.1 y solo dice «Demostrar». Las
+notas dicen que la deducción de <span class="math notranslate nohighlight">\(a_i\)</span> y de los pesos «se demuestra fácilmente» (parte A) y,
+en los ejercicios de la Sec. 5.6, piden probar que el error de entrenamiento tiende a cero
+exponencialmente rápido (parte B). Se incluyen ambas.</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Idea</p>
+<p>(A) Con la pérdida exponencial, el problema voraz se factoriza en un peso por muestra
+y un único parámetro <span class="math notranslate nohighlight">\(a\)</span>. (B) La pérdida 0-1 queda acotada por la exponencial, cuya suma
+es exactamente el producto de las constantes de normalización <span class="math notranslate nohighlight">\(Z_i\)</span>.</p>
+</div>
+<section id="parte-a-derivacion-del-algoritmo">
+<h2>Parte A: derivación del algoritmo<a class="headerlink" href="#parte-a-derivacion-del-algoritmo" title="Link to this heading">#</a></h2>
+<div class="proof lemma admonition" id="lem-pesos">
+<p class="admonition-title"><span class="caption-number">Lema 3 </span> (Pesos)</p>
+<section class="lemma-content" id="proof-content">
+<p>Para todo <span class="math notranslate nohighlight">\(i\ge1\)</span>: <span class="math notranslate nohighlight">\(\omega_n^{(i)}=e^{-y_nF_{i-1}(\bx_n)}/W_{i-1}\)</span>, con <span class="math notranslate nohighlight">\(W_{i-1}=\sum_me^{-y_mF_{i-1}(\bx_m)}\)</span> y
+<span class="math notranslate nohighlight">\(F_0\equiv0\)</span>.</p>
+</section>
+</div><div class="demo admonition">
+<p class="admonition-title">Demostración</p>
+<p>Inducción. Para <span class="math notranslate nohighlight">\(i=1\)</span>, <span class="math notranslate nohighlight">\(\omega_n^{(1)}=1/N=e^0/N\)</span>. Si vale para <span class="math notranslate nohighlight">\(i\)</span>, el algoritmo hace
+<span class="math notranslate nohighlight">\(\omega_n^{(i+1)}=\omega_n^{(i)}e^{-y_na_i\phi_i(\bx_n)}/Z_i\)</span> (líneas 5–8), luego
+<span class="math notranslate nohighlight">\(\omega_n^{(i+1)}\propto e^{-y_nF_{i-1}(\bx_n)}e^{-y_na_i\phi_i(\bx_n)}=e^{-y_nF_i(\bx_n)}\)</span> y,
+como los pesos suman 1, <span class="math notranslate nohighlight">\(\omega_n^{(i+1)}=e^{-y_nF_i(\bx_n)}/W_i\)</span>.</p>
+</div>
+<div class="demo admonition">
+<p class="admonition-title">Demostración: Elección de <span class="math notranslate nohighlight">\(\theta_i\)</span> (Ecs. 5.5–5.6)</p>
+<p>Con <span class="math notranslate nohighlight">\(F_i=F_{i-1}+a\phi\)</span> y el <a class="reference internal" href="#lem-pesos">Lema 3</a>,</p>
+<div class="math notranslate nohighlight">
+\[
+J(a,\theta)=\sum_ne^{-y_n(F_{i-1}(\bx_n)+a\phi(\bx_n;\theta))}=W_{i-1}\sum_n\omega_n^{(i)}e^{-ay_n\phi(\bx_n;\theta)}.
+\]</div>
+<p>Como <span class="math notranslate nohighlight">\(y_n\phi\in\{-1,1\}\)</span>, <span class="math notranslate nohighlight">\(e^{-ay_n\phi}=e^{-a}+(e^a-e^{-a})\Ind_{[y_n\phi&lt;0]}\)</span>. Con <span class="math notranslate nohighlight">\(\sum_n\omega_n^{(i)}=1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+J(a,\theta)=W_{i-1}\big[e^{-a}+(e^a-e^{-a})P(\theta)\big],\qquad P(\theta)=\sum_n\omega_n^{(i)}\Ind_{[y_n\phi(\bx_n;\theta)&lt;0]}.
+\]</div>
+<p>Para <span class="math notranslate nohighlight">\(a&gt;0\)</span>, <span class="math notranslate nohighlight">\(e^a-e^{-a}&gt;0\)</span>; así, minimizar en <span class="math notranslate nohighlight">\(\theta\)</span> equivale a minimizar el error ponderado <span class="math notranslate nohighlight">\(P(\theta)\)</span>, sin
+importar <span class="math notranslate nohighlight">\(a\)</span>: <span class="math notranslate nohighlight">\(\theta_i=\arg\min_\theta P(\theta)\)</span> y <span class="math notranslate nohighlight">\(P_i=P(\theta_i)\)</span>.</p>
+</div>
+<div class="demo admonition">
+<p class="admonition-title">Demostración: Elección de <span class="math notranslate nohighlight">\(a_i\)</span></p>
+<p>Con <span class="math notranslate nohighlight">\(\theta_i\)</span> fijo, <span class="math notranslate nohighlight">\(J/W_{i-1}=g(a):=(1-P_i)e^{-a}+P_ie^a\)</span>. Entonces <span class="math notranslate nohighlight">\(g'(a)=-(1-P_i)e^{-a}+
+P_ie^a\)</span> y <span class="math notranslate nohighlight">\(g''(a)&gt;0\)</span>, luego <span class="math notranslate nohighlight">\(g\)</span> es estrictamente convexa y su mínimo cumple <span class="math notranslate nohighlight">\(e^{2a}=\frac{1-P_i}{P_i}\)</span>, es decir</p>
+<div class="math notranslate nohighlight">
+\[
+a_i=\tfrac12\ln\frac{1-P_i}{P_i},\qquad a_i&gt;0\iff P_i&lt;\tfrac12.
+\]</div>
+<p>(Si <span class="math notranslate nohighlight">\(P_i&gt;\frac12\)</span> basta cambiar <span class="math notranslate nohighlight">\(\phi_i\)</span> por <span class="math notranslate nohighlight">\(-\phi_i\)</span>, cuyo error es <span class="math notranslate nohighlight">\(1-P_i&lt;\frac12\)</span>.)</p>
+</div>
+<div class="proof lemma admonition" id="lem-Z">
+<p class="admonition-title"><span class="caption-number">Lema 4 </span> (Valor de <span class="math notranslate nohighlight">\(Z_i\)</span>)</p>
+<section class="lemma-content" id="proof-content">
+<p><span class="math notranslate nohighlight">\(Z_i=\sum_n\omega_n^{(i)}e^{-y_na_i\phi_i(\bx_n)}=g(a_i)=2\sqrt{P_i(1-P_i)}\)</span>.</p>
+</section>
+</div><div class="demo admonition">
+<p class="admonition-title">Demostración</p>
+<p>Los puntos bien clasificados pesan <span class="math notranslate nohighlight">\(1-P_i\)</span> y se multiplican por <span class="math notranslate nohighlight">\(e^{-a_i}=\sqrt{P_i/(1-P_i)}\)</span>;
+los mal clasificados pesan <span class="math notranslate nohighlight">\(P_i\)</span> y se multiplican por <span class="math notranslate nohighlight">\(e^{a_i}=\sqrt{(1-P_i)/P_i}\)</span>. Luego
+<span class="math notranslate nohighlight">\(Z_i=(1-P_i)\sqrt{\frac{P_i}{1-P_i}}+P_i\sqrt{\frac{1-P_i}{P_i}}=2\sqrt{P_i(1-P_i)}\)</span>.</p>
+</div>
+<p>Esto justifica todas las líneas del algoritmo: los pesos del <a class="reference internal" href="#lem-pesos">Lema 3</a>, el <span class="math notranslate nohighlight">\(\theta_i\)</span> que minimiza <span class="math notranslate nohighlight">\(P_i\)</span>, <span class="math notranslate nohighlight">\(a_i\)</span>,
+y <span class="math notranslate nohighlight">\(Z_i\)</span> como constante que renormaliza los pesos. Además, con los nuevos pesos el error de <span class="math notranslate nohighlight">\(\phi_i\)</span> es
+<span class="math notranslate nohighlight">\(P_ie^{a_i}/Z_i=\frac12\)</span>, de modo que <span class="math notranslate nohighlight">\(\phi_i\)</span> ya no aporta información en la siguiente ronda.</p>
+</section>
+<section id="parte-b-el-error-de-entrenamiento">
+<h2>Parte B: el error de entrenamiento<a class="headerlink" href="#parte-b-el-error-de-entrenamiento" title="Link to this heading">#</a></h2>
+<div class="demo admonition">
+<p class="admonition-title">Demostración de (B)</p>
+<p><strong>Paso 1 (suma de la pérdida exponencial).</strong> Desenrollando la recursión de pesos desde <span class="math notranslate nohighlight">\(\omega_n^{(1)}=1/N\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\omega_n^{(K+1)}=\frac1N\frac{\prod_{i=1}^Ke^{-y_na_i\phi_i(\bx_n)}}{\prod_{i=1}^KZ_i}=\frac{e^{-y_nF_K(\bx_n)}}{N\prod_iZ_i}.
+\]</div>
+<p>Sumando en <span class="math notranslate nohighlight">\(n\)</span> (los pesos suman 1): <span class="math notranslate nohighlight">\(\ \frac1N\sum_{n=1}^Ne^{-y_nF_K(\bx_n)}=\prod_{i=1}^KZ_i\)</span>.</p>
+<p><strong>Paso 2 (0-1 <span class="math notranslate nohighlight">\(\le\)</span> exponencial).</strong> Si <span class="math notranslate nohighlight">\(f(\bx_n)\neq y_n\)</span> entonces <span class="math notranslate nohighlight">\(y_nF_K(\bx_n)\le0\)</span> (con <span class="math notranslate nohighlight">\(\sgn(0)=+1\)</span>), así que
+<span class="math notranslate nohighlight">\(e^{-y_nF_K(\bx_n)}\ge1=\Ind_{[f(\bx_n)\neq y_n]}\)</span>; si <span class="math notranslate nohighlight">\(f(\bx_n)=y_n\)</span>, <span class="math notranslate nohighlight">\(0\le e^{-y_nF_K(\bx_n)}\)</span>. Promediando y usando el Paso 1,</p>
+<div class="math notranslate nohighlight">
+\[
+L_S(f)\le\frac1N\sum_ne^{-y_nF_K(\bx_n)}=\prod_{i=1}^KZ_i.
+\]</div>
+<p><strong>Paso 3.</strong> Por el <a class="reference internal" href="#lem-Z">Lema 4</a> y <span class="math notranslate nohighlight">\(P_i=\frac12-\gamma_i\)</span>: <span class="math notranslate nohighlight">\(4P_i(1-P_i)=4(\frac12-\gamma_i)(\frac12+\gamma_i)=1-4\gamma_i^2\)</span>, luego
+<span class="math notranslate nohighlight">\(Z_i=\sqrt{1-4\gamma_i^2}\)</span>.</p>
+<p><strong>Paso 4.</strong> Como <span class="math notranslate nohighlight">\(1-x\le e^{-x}\)</span> para todo <span class="math notranslate nohighlight">\(x\)</span> (la recta tangente a <span class="math notranslate nohighlight">\(e^{-x}\)</span> en 0 queda por debajo de la
+curva convexa), <span class="math notranslate nohighlight">\(\sqrt{1-4\gamma_i^2}\le\sqrt{e^{-4\gamma_i^2}}=e^{-2\gamma_i^2}\)</span>. Multiplicando sobre <span class="math notranslate nohighlight">\(i\)</span>: <span class="math notranslate nohighlight">\(\prod_iZ_i\le\exp(-2\sum_i\gamma_i^2)\)</span>.</p>
+</div>
+<div class="seealso admonition">
+<p class="admonition-title">Corolario: convergencia exponencial</p>
+<p>Si cada clasificador base es ligeramente mejor que
+el azar, <span class="math notranslate nohighlight">\(P_i\le\frac12-\gamma\)</span>, entonces <span class="math notranslate nohighlight">\(L_S(f)\le e^{-2\gamma^2K}\)</span>. Como <span class="math notranslate nohighlight">\(L_S(f)\in\{0,\frac1N,\frac2N,\dots\}\)</span>, el error es
+<em>exactamente</em> 0 en cuanto <span class="math notranslate nohighlight">\(e^{-2\gamma^2K}&lt;\frac1N\)</span>, es decir <span class="math notranslate nohighlight">\(K&gt;\dfrac{\ln N}{2\gamma^2}\)</span>. Ejemplo: <span class="math notranslate nohighlight">\(N=200\)</span>, <span class="math notranslate nohighlight">\(\gamma=0.1\)</span> da
+<span class="math notranslate nohighlight">\(K\ge265\)</span>. La cota es sobre el error de <em>entrenamiento</em>; no dice nada del error de prueba.</p>
+</div>
+</section>
+<section id="comprobacion-numerica">
+<h2>Comprobación numérica<a class="headerlink" href="#comprobacion-numerica" title="Link to this heading">#</a></h2>
+<p>El siguiente código implementa el Algoritmo 5.1 con tocones de decisión sobre datos ruidosos
+(<span class="math notranslate nohighlight">\(N=200\)</span>) y verifica la cadena <a class="reference internal" href="#equation-eq-ada-cota">(13)</a> en cada iteración.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Mostrar código</p>
+<p class="expanded admonition-title">Ocultar código</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">N</span><span class="p">,</span> <span class="n">K</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">40</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span><span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.08</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>                         <span class="c1"># ruido en las etiquetas</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mejor_tocon</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="n">mejor</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="o">-</span><span class="n">s</span><span class="p">)</span>
+                <span class="n">P</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">pred</span> <span class="o">!=</span> <span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">P</span> <span class="o">&lt;</span> <span class="n">mejor</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">mejor</span> <span class="o">=</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">mejor</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">tocon</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+    <span class="n">j</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">theta</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="o">-</span><span class="n">s</span><span class="p">)</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">P_hist</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="n">prodZ</span><span class="p">,</span> <span class="n">cota</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="n">logZ</span> <span class="o">=</span> <span class="n">sum_g2</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+    <span class="n">P</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="n">mejor_tocon</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">tocon</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">P</span><span class="p">)</span> <span class="o">/</span> <span class="n">P</span><span class="p">)</span>
+    <span class="n">pesos</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">y</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">phi</span><span class="p">)</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">pesos</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">pesos</span> <span class="o">/</span> <span class="n">Z</span>
+    <span class="n">F</span> <span class="o">+=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">phi</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">F</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">logZ</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Z</span><span class="p">);</span> <span class="n">sum_g2</span> <span class="o">+=</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">-</span> <span class="n">P</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">P</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">P</span><span class="p">)))</span>      <span class="c1"># Lema Z_i</span>
+    <span class="n">P_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">P</span><span class="p">);</span> <span class="n">err</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">f</span> <span class="o">!=</span> <span class="n">y</span><span class="p">))</span>
+    <span class="n">prodZ</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logZ</span><span class="p">));</span> <span class="n">cota</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sum_g2</span><span class="p">))</span>
+
+<span class="n">err</span><span class="p">,</span> <span class="n">prodZ</span><span class="p">,</span> <span class="n">cota</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">prodZ</span><span class="p">,</span> <span class="n">cota</span><span class="p">))</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">err</span> <span class="o">&lt;=</span> <span class="n">prodZ</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">prodZ</span> <span class="o">&lt;=</span> <span class="n">cota</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'K'</span><span class="si">:</span><span class="s2">&gt;3</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'P_K'</span><span class="si">:</span><span class="s2">&gt;7</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'error entr.'</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'∏Z_i'</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'exp(-2Σγ²)'</span><span class="si">:</span><span class="s2">&gt;11</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">:</span><span class="s2">&gt;3</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">P_hist</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">7.3f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">err</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">12.3f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">prodZ</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">8.3f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">cota</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">11.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">ks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">K</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">4.3</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">ks</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="s2">"-o"</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#1f4e79"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"error de entrenamiento de $f=\mathrm</span><span class="si">{sgn}</span><span class="s2">(F_K)$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">ks</span><span class="p">,</span> <span class="n">prodZ</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#c0392b"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"$\prod_{i\leq K} Z_i$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">ks</span><span class="p">,</span> <span class="n">cota</span><span class="p">,</span> <span class="s2">"--"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#2e8b57"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"$\exp(-2\sum_{i\leq K}\gamma_i^2)$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"iteración $K$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">rf</span><span class="s2">"AdaBoost con tocones de decisión ($N=</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">$)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">);</span> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s2">"top"</span><span class="p">,</span> <span class="s2">"right"</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  K     P_K  error entr.     ∏Z_i  exp(-2Σγ²)
+  1   0.385        0.385    0.973       0.974
+  5   0.372        0.220    0.822       0.829
+ 10   0.409        0.150    0.709       0.719
+ 20   0.435        0.110    0.596       0.606
+ 30   0.434        0.090    0.540       0.549
+ 40   0.452        0.105    0.508       0.517
+</pre></div>
+</div>
+<img alt="_images/c461ff4ab6e361961e48cecbcb314f5c971f809fb8deca7f24668040fea8a0b8.png" src="_images/c461ff4ab6e361961e48cecbcb314f5c971f809fb8deca7f24668040fea8a0b8.png" />
+</div>
+</div>
+<p><strong>Figura 5.</strong> AdaBoost con tocones de decisión sobre datos ruidosos (<span class="math notranslate nohighlight">\(N=200\)</span>). La cota <span class="math notranslate nohighlight">\(\prod Z_i\le e^{-2\sum\gamma_i^2}\)</span> se
+cumple en cada iteración; aquí es holgada porque <span class="math notranslate nohighlight">\(\gamma_i\)</span> es pequeño.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="cap07_arboles.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">7. Árboles: dónde está el error del Ejercicio 6 (Sec. 12)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="cap09_verificaciones.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">9. Verificaciones numéricas</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parte-a-derivacion-del-algoritmo">Parte A: derivación del algoritmo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parte-b-el-error-de-entrenamiento">Parte B: el error de entrenamiento</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comprobacion-numerica">Comprobación numérica</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Tu nombre
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
