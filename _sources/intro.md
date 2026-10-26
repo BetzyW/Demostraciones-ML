@@ -1,4 +1,4 @@
-# Demostraciones de la tarea de Machine Learning
+# Demostraciones - Machine Learning
 
 **k-NN · Regresión Ridge y Lasso · Árboles y AdaBoost**
 
