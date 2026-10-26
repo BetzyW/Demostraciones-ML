@@ -1,0 +1,21 @@
+format: jb-book
+root: intro
+parts:
+  - caption: k-NN
+    chapters:
+      - file: cap01_knn_riesgo
+      - file: cap02_knn_desigualdad
+  - caption: Regresión Ridge y Lasso
+    chapters:
+      - file: cap03_ridge_propiedades
+      - file: cap04_ridge_intercepto
+      - file: cap05_ridge_estandarizacion
+      - file: cap06_lasso
+  - caption: Árboles y AdaBoost
+    chapters:
+      - file: cap07_arboles
+      - file: cap08_adaboost
+  - caption: Cierre
+    chapters:
+      - file: cap09_verificaciones
+      - file: referencias

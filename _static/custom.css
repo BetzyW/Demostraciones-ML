@@ -1,0 +1,14 @@
+div.admonition.demo {
+  border-left-color: #6c757d;
+  background: transparent;
+}
+div.admonition.demo > .admonition-title {
+  background: rgba(108, 117, 125, 0.08);
+  font-style: italic;
+}
+div.admonition.demo > .admonition-title::after { content: none; }
+div.admonition.demo > :last-child::after {
+  content: "∎";
+  float: right;
+  font-size: 1.1em;
+}
