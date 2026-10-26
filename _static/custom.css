@@ -7,8 +7,14 @@ div.admonition.demo > .admonition-title {
   font-style: italic;
 }
 div.admonition.demo > .admonition-title::after { content: none; }
-div.admonition.demo > :last-child::after {
+div.admonition.demo {
+  position: relative;
+  padding-bottom: 1.8em;
+}
+div.admonition.demo::after {
   content: "∎";
-  float: right;
+  position: absolute;
+  right: 1em;
+  bottom: 0.5em;
   font-size: 1.1em;
 }
