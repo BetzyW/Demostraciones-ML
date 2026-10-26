@@ -116,12 +116,3 @@ for k, a in enumerate(alphas[:-1]):
 print("    fórmula del conjunto activo en los nodos de LARS, error máx:", err)
 print("    λ_max =", 2*np.abs(X.T@y).max(), "  primer nodo:", 2*n*alphas[0])
 ```
-
-```{admonition} Limitación
-:class: warning
-
-Las figuras `TREEDECISION1--6` de la página de soluciones no pudieron abrirse; el
-análisis del capítulo 7 se apoya en el recálculo y en el texto de la solución. Los datos de las
-figuras 3 y 5 son simulados (semilla fija), por lo que sus valores concretos pueden diferir de los del
-documento original; las propiedades verificadas no dependen de ellos.
-```

@@ -467,9 +467,8 @@ con <span class="math notranslate nohighlight">\(\text{Gini}=1-\sum_i(n_i/N)^2\)
 <p class="admonition-title">Cómo se hizo la verificación</p>
 <p>Todo se recalculó con fracciones exactas (ver la celda de código al final del capítulo). Los umbrales de
 <code class="docutils literal notranslate"><span class="pre">Age</span></code> son puntos medios entre valores <em>distintos</em> consecutivos; “izquierda” es <span class="math notranslate nohighlight">\(\text{Age}&lt;a\)</span>. En las
-tablas, <span class="math notranslate nohighlight">\(n\)</span> (Sí/No) indica el tamaño del grupo y cuántos son astronautas. No pudieron abrirse las
-imágenes <code class="docutils literal notranslate"><span class="pre">TREEDECISION1--6</span></code> de la página; de ellas solo se vieron los umbrales 27–39 del archivo.
-El resto se contrastó con los números que da el <em>texto</em> de la solución.</p>
+tablas, <span class="math notranslate nohighlight">\(n\)</span> (Sí/No) indica el tamaño del grupo y cuántos son astronautas. Los valores se
+contrastaron con los diagramas <code class="docutils literal notranslate"><span class="pre">TREEDECISION1--6</span></code> y con el texto de la solución.</p>
 </div>
 <section id="raiz-n-10-5-si-5-no-text-gini-0-5">
 <h2>7.1 Raíz (<span class="math notranslate nohighlight">\(n=10\)</span>, 5 Sí / 5 No, <span class="math notranslate nohighlight">\(\text{Gini}=0.5\)</span>)<a class="headerlink" href="#raiz-n-10-5-si-5-no-text-gini-0-5" title="Link to this heading">#</a></h2>
@@ -576,11 +575,24 @@ El resto se contrastó con los números que da el <em>texto</em> de la solución
 </tbody>
 </table>
 </div>
-<p>La mejor partición es <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code> (<span class="math notranslate nohighlight">\(1/6\approx0.17\)</span>), como dice la solución. <strong>El primer árbol
-es correcto</strong>: con <span class="math notranslate nohighlight">\(a=27\)</span>, <span class="math notranslate nohighlight">\(\text{Gini}(D_1)=0\)</span>, <span class="math notranslate nohighlight">\(\text{Gini}(D_2)=1-(5/9)^2-(4/9)^2=40/81\approx0.49\)</span> y
-<span class="math notranslate nohighlight">\(\text{Gini}_{\text{split}}=\frac9{10}\cdot\frac{40}{81}=\frac49\approx0.44\)</span>; igual para 33 y 39 (<span class="math notranslate nohighlight">\(=0.5\)</span>). Solo hay una observación: la solución
+<p>La mejor partición es <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code> (<span class="math notranslate nohighlight">\(1/6\approx0.17\)</span>), como dice la solución, y la elección de la raíz
+es correcta. Los umbrales 27, 33 y 39 también están bien calculados: con <span class="math notranslate nohighlight">\(a=27\)</span>, <span class="math notranslate nohighlight">\(\text{Gini}(D_1)=0\)</span>,
+<span class="math notranslate nohighlight">\(\text{Gini}(D_2)=1-(5/9)^2-(4/9)^2=40/81\approx0.49\)</span> y
+<span class="math notranslate nohighlight">\(\text{Gini}_{\text{split}}=\frac9{10}\cdot\frac{40}{81}=\frac49\approx0.44\)</span>; igual para 33 y 39 (<span class="math notranslate nohighlight">\(=0.5\)</span>). La solución
 lista también 36 y 47, que no son puntos medios entre valores distintos y dan las mismas particiones
 que 33 y 46.5 (duplicados inofensivos). Además 27 y 49 empatan en <span class="math notranslate nohighlight">\(4/9\)</span>.</p>
+<div class="danger admonition">
+<p class="admonition-title">Errores en los diagramas de la raíz</p>
+<p>Aunque la variable elegida es la correcta, tres diagramas del primer nivel tienen errores:</p>
+<ol class="arabic simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Dogs</span></code>:</strong> la solución usa los conteos 4/1 (Sí) y 0/5 (No), con <span class="math notranslate nohighlight">\(\text{Gini}_{\text{split}}=0.32\)</span>.
+Lo correcto es 3/2 y 2/3, con <span class="math notranslate nohighlight">\(\text{Gini}_{\text{split}}=\frac{12}{25}=0.48\)</span>.</p></li>
+<li><p><strong>Umbral 49:</strong> los conteos de los dos grupos aparecen intercambiados. Lo correcto es
+9 (5/4) a la izquierda y 1 (0/1) a la derecha.</p></li>
+<li><p><strong>Umbral 43:</strong> se usa un peso de <span class="math notranslate nohighlight">\(\frac{8}{10}\)</span> donde corresponde <span class="math notranslate nohighlight">\(\frac{5}{10}\)</span> (cada lado tiene 5 datos).</p></li>
+</ol>
+<p>Ninguno de estos errores cambia la variable de la raíz, porque <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code> (<span class="math notranslate nohighlight">\(0.17\)</span>) sigue siendo la mejor.</p>
+</div>
 </section>
 <section id="nodo-like-gravity-si-n-6-5-si-1-no-text-gini-5-18">
 <h2>7.2 Nodo <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code> = Sí (<span class="math notranslate nohighlight">\(n=6\)</span>; 5 Sí / 1 No; <span class="math notranslate nohighlight">\(\text{Gini}=5/18\)</span>)<a class="headerlink" href="#nodo-like-gravity-si-n-6-5-si-1-no-text-gini-5-18" title="Link to this heading">#</a></h2>
@@ -652,12 +664,12 @@ Like Dogs).</p>
 <div class="danger admonition">
 <p class="admonition-title">Aquí está el error</p>
 <ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Dogs</span></code>: la solución reporta 0.17; el valor correcto es <span class="math notranslate nohighlight">\(\frac14=0.25\)</span>. (El 0.17 es el Gini de
-<code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code> en la raíz; parece haberse copiado.)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Age</span></code>: la solución dice que el mejor umbral es 45.5 (0.22, valor que sí es correcto). Pero
-el umbral <strong>49</strong> separa perfectamente (<span class="math notranslate nohighlight">\(\{30,36,44,47,47\}\)</span> son todos Sí y <span class="math notranslate nohighlight">\(\{51\}\)</span> es No): <strong>Gini
-<span class="math notranslate nohighlight">\(=0\)</span></strong>. Se omitió o se calculó mal.</p></li>
-<li><p>Por eso eligen <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Dogs</span></code> (<span class="math notranslate nohighlight">\(0.17&lt;0.22\)</span>) cuando lo correcto es <span class="math notranslate nohighlight">\(\text{Age}&lt;49\)</span> (<span class="math notranslate nohighlight">\(0&lt;0.22&lt;0.25\)</span>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Dogs</span></code>: la solución reporta 0.17 porque contó 4/0 (Sí) y 1/1 (No). Los conteos correctos son
+3/1 y 2/0, y el valor correcto es <span class="math notranslate nohighlight">\(\frac14=0.25\)</span>.</p></li>
+<li><p>Umbral <strong>49</strong>: la solución lo calculó, pero mal, con 4/1 y 1/0 y <span class="math notranslate nohighlight">\(\text{Gini}_{\text{split}}\approx0.26\)</span>. Lo correcto
+es 5/0 y 0/1: separa perfectamente (<span class="math notranslate nohighlight">\(\{30,36,44,47,47\}\)</span> son todos Sí y <span class="math notranslate nohighlight">\(\{51\}\)</span> es No), así que <strong>Gini <span class="math notranslate nohighlight">\(=0\)</span></strong>.
+El umbral 45.5 (0.22) sí está bien calculado.</p></li>
+<li><p>Por eso eligen <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Dogs</span></code> (<span class="math notranslate nohighlight">\(0.17&lt;0.22&lt;0.26\)</span>) cuando lo correcto es <span class="math notranslate nohighlight">\(\text{Age}&lt;49\)</span> (<span class="math notranslate nohighlight">\(0&lt;0.22&lt;0.25\)</span>).</p></li>
 </ol>
 </div>
 </section>
@@ -835,9 +847,9 @@ Derecha: árbol corregido.</p>
 </div>
 <div class="seealso admonition">
 <p class="admonition-title">Conclusión</p>
-<p>El error <em>no</em> está en el primer árbol (umbrales <span class="math notranslate nohighlight">\(27,33,36,39,\dots\)</span>). Está en el
-nodo <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code>=Sí: Gini de <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Dogs</span></code> <span class="math notranslate nohighlight">\(=0.25\)</span> (no 0.17), umbral <span class="math notranslate nohighlight">\(\text{Age}=49\)</span> con Gini 0
-omitido, y ramas finales mal asignadas. El árbol correcto es: <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code>=No <span class="math notranslate nohighlight">\(\Rightarrow\)</span> No; <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code>=Sí <span class="math notranslate nohighlight">\(\Rightarrow\)</span> (<span class="math notranslate nohighlight">\(\text{Age}&lt;49\Rightarrow\)</span> Sí, en otro caso No), con 100 % de exactitud en entrenamiento.</p>
+<p>En la raíz, la variable elegida (<code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code>) es correcta, aunque los diagramas de <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Dogs</span></code> y de los
+umbrales 43 y 49 tienen errores. El error que cambia el árbol está en el nodo <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code>=Sí: Gini de
+<code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Dogs</span></code> <span class="math notranslate nohighlight">\(=0.25\)</span> (no 0.17), umbral <span class="math notranslate nohighlight">\(\text{Age}=49\)</span> con Gini 0 (no 0.26), y ramas finales mal asignadas. El árbol correcto es: <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code>=No <span class="math notranslate nohighlight">\(\Rightarrow\)</span> No; <code class="docutils literal notranslate"><span class="pre">Like</span> <span class="pre">Gravity</span></code>=Sí <span class="math notranslate nohighlight">\(\Rightarrow\)</span> (<span class="math notranslate nohighlight">\(\text{Age}&lt;49\Rightarrow\)</span> Sí, en otro caso No), con 100 % de exactitud en entrenamiento.</p>
 </div>
 </section>
 <section id="recalculo-con-fracciones-exactas">
@@ -1005,7 +1017,7 @@ omitido, y ramas finales mal asignadas. El árbol correcto es: <code class="docu
   <div class="footer-item">
     
 <p class="component-author">
-Por Tu nombre
+Por Betzaida Ruiz
 </p>
 
   </div>

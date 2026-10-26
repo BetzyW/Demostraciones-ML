@@ -31,9 +31,8 @@ con $\text{Gini}=1-\sum_i(n_i/N)^2$. Localizar el error de la solución propuest
 
 Todo se recalculó con fracciones exactas (ver la celda de código al final del capítulo). Los umbrales de
 `Age` son puntos medios entre valores *distintos* consecutivos; “izquierda” es $\text{Age}<a$. En las
-tablas, $n$ (Sí/No) indica el tamaño del grupo y cuántos son astronautas. No pudieron abrirse las
-imágenes `TREEDECISION1--6` de la página; de ellas solo se vieron los umbrales 27–39 del archivo.
-El resto se contrastó con los números que da el *texto* de la solución.
+tablas, $n$ (Sí/No) indica el tamaño del grupo y cuántos son astronautas. Los valores se
+contrastaron con los diagramas `TREEDECISION1--6` y con el texto de la solución.
 ```
 
 ## 7.1 Raíz ($n=10$, 5 Sí / 5 No, $\text{Gini}=0.5$)
@@ -52,11 +51,26 @@ El resto se contrastó con los números que da el *texto* de la solución.
 | Like Dogs | 5 (3/2) | 5 (2/3) | 0.4800 | 0.4800 | $\frac{12}{25}$ | 0.4800 |
 | **Like Gravity** | **6 (5/1)** | **4 (0/4)** | **0.2778** | **0.0000** | $\mathbf{\frac16}$ | **0.1667** |
 
-La mejor partición es `Like Gravity` ($1/6\approx0.17$), como dice la solución. **El primer árbol
-es correcto**: con $a=27$, $\text{Gini}(D_1)=0$, $\text{Gini}(D_2)=1-(5/9)^2-(4/9)^2=40/81\approx0.49$ y
-$\text{Gini}_{\text{split}}=\frac9{10}\cdot\frac{40}{81}=\frac49\approx0.44$; igual para 33 y 39 ($=0.5$). Solo hay una observación: la solución
+La mejor partición es `Like Gravity` ($1/6\approx0.17$), como dice la solución, y la elección de la raíz
+es correcta. Los umbrales 27, 33 y 39 también están bien calculados: con $a=27$, $\text{Gini}(D_1)=0$,
+$\text{Gini}(D_2)=1-(5/9)^2-(4/9)^2=40/81\approx0.49$ y
+$\text{Gini}_{\text{split}}=\frac9{10}\cdot\frac{40}{81}=\frac49\approx0.44$; igual para 33 y 39 ($=0.5$). La solución
 lista también 36 y 47, que no son puntos medios entre valores distintos y dan las mismas particiones
 que 33 y 46.5 (duplicados inofensivos). Además 27 y 49 empatan en $4/9$.
+
+```{admonition} Errores en los diagramas de la raíz
+:class: danger
+
+Aunque la variable elegida es la correcta, tres diagramas del primer nivel tienen errores:
+
+1. **`Like Dogs`:** la solución usa los conteos 4/1 (Sí) y 0/5 (No), con $\text{Gini}_{\text{split}}=0.32$.
+   Lo correcto es 3/2 y 2/3, con $\text{Gini}_{\text{split}}=\frac{12}{25}=0.48$.
+2. **Umbral 49:** los conteos de los dos grupos aparecen intercambiados. Lo correcto es
+   9 (5/4) a la izquierda y 1 (0/1) a la derecha.
+3. **Umbral 43:** se usa un peso de $\frac{8}{10}$ donde corresponde $\frac{5}{10}$ (cada lado tiene 5 datos).
+
+Ninguno de estos errores cambia la variable de la raíz, porque `Like Gravity` ($0.17$) sigue siendo la mejor.
+```
 
 ## 7.2 Nodo `Like Gravity` = Sí ($n=6$; 5 Sí / 1 No; $\text{Gini}=5/18$)
 
@@ -75,12 +89,12 @@ Like Dogs).
 ```{admonition} Aquí está el error
 :class: danger
 
-1. `Like Dogs`: la solución reporta 0.17; el valor correcto es $\frac14=0.25$. (El 0.17 es el Gini de
-   `Like Gravity` en la raíz; parece haberse copiado.)
-2. `Age`: la solución dice que el mejor umbral es 45.5 (0.22, valor que sí es correcto). Pero
-   el umbral **49** separa perfectamente ($\{30,36,44,47,47\}$ son todos Sí y $\{51\}$ es No): **Gini
-   $=0$**. Se omitió o se calculó mal.
-3. Por eso eligen `Like Dogs` ($0.17<0.22$) cuando lo correcto es $\text{Age}<49$ ($0<0.22<0.25$).
+1. `Like Dogs`: la solución reporta 0.17 porque contó 4/0 (Sí) y 1/1 (No). Los conteos correctos son
+   3/1 y 2/0, y el valor correcto es $\frac14=0.25$.
+2. Umbral **49**: la solución lo calculó, pero mal, con 4/1 y 1/0 y $\text{Gini}_{\text{split}}\approx0.26$. Lo correcto
+   es 5/0 y 0/1: separa perfectamente ($\{30,36,44,47,47\}$ son todos Sí y $\{51\}$ es No), así que **Gini $=0$**.
+   El umbral 45.5 (0.22) sí está bien calculado.
+3. Por eso eligen `Like Dogs` ($0.17<0.22<0.26$) cuando lo correcto es $\text{Age}<49$ ($0<0.22<0.25$).
 ```
 
 ## 7.3 El árbol final de la solución también está mal
@@ -163,9 +177,9 @@ Derecha: árbol corregido.
 ```{admonition} Conclusión
 :class: seealso
 
-El error *no* está en el primer árbol (umbrales $27,33,36,39,\dots$). Está en el
-nodo `Like Gravity`=Sí: Gini de `Like Dogs` $=0.25$ (no 0.17), umbral $\text{Age}=49$ con Gini 0
-omitido, y ramas finales mal asignadas. El árbol correcto es: `Like Gravity`=No $\Rightarrow$ No; `Like
+En la raíz, la variable elegida (`Like Gravity`) es correcta, aunque los diagramas de `Like Dogs` y de los
+umbrales 43 y 49 tienen errores. El error que cambia el árbol está en el nodo `Like Gravity`=Sí: Gini de
+`Like Dogs` $=0.25$ (no 0.17), umbral $\text{Age}=49$ con Gini 0 (no 0.26), y ramas finales mal asignadas. El árbol correcto es: `Like Gravity`=No $\Rightarrow$ No; `Like
 Gravity`=Sí $\Rightarrow$ ($\text{Age}<49\Rightarrow$ Sí, en otro caso No), con 100 % de exactitud en entrenamiento.
 ```
 
